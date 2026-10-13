@@ -1,0 +1,10 @@
+# Gives Dependabot an outdated action to update. It only runs on manual dispatch.
+name: pinned-tool
+
+on: workflow_dispatch
+
+jobs:
+  noop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v3

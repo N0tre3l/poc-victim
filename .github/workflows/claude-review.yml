@@ -1,0 +1,41 @@
+# Automated Claude review of pull requests.
+name: claude-review
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: event-identities
+        env:
+          EVENT_ACTION: ${{ github.event.action }}
+          ACTOR: ${{ github.actor }}
+          TRIGGERING_ACTOR: ${{ github.triggering_actor }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+        run: |
+          echo "event action            : $EVENT_ACTION"
+          echo "github.actor            : $ACTOR"
+          echo "github.triggering_actor : $TRIGGERING_ACTOR"
+          echo "pull request author     : $PR_AUTHOR"
+          echo "pull request head repo  : $HEAD_REPO"
+
+      - uses: actions/checkout@v6
+
+      - uses: anthropics/claude-code-action@1d6de8cb0c237e7c15e9e1bdf973826ebae490cc
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: "Review this PR for security issues"
+          allowed_bots: "dependabot[bot],renovate[bot]"
+          claude_args: "--max-turns 3"
+        env:
+          ANTHROPIC_CUSTOM_HEADERS: "X-HackerOne-Handle: notre3l"
