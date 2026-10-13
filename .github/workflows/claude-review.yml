@@ -28,7 +28,7 @@ jobs:
           echo "pull request author     : $PR_AUTHOR"
           echo "pull request head repo  : $HEAD_REPO"
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: anthropics/claude-code-action@1d6de8cb0c237e7c15e9e1bdf973826ebae490cc
         with:
