@@ -1,0 +1,31 @@
+name: W1B CCA pr-labeled probe
+on:
+  pull_request_target:
+    types: [labeled]
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  id-token: write
+  actions: read
+jobs:
+  claude:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+      - name: event-identities
+        run: |
+          echo "event action    : ${{ github.event.action }}"
+          echo "github.actor    : ${{ github.actor }}"
+          echo "label           : ${{ github.event.label.name }}"
+          echo "pr user         : ${{ github.event.pull_request.user.login }}"
+          echo "pr body         : ${{ github.event.pull_request.body }}"
+      - name: Run Claude Code (pinned 1d6de8c)
+        id: claude
+        uses: anthropics/claude-code-action@1d6de8cb0c237e7c15e9e1bdf973826ebae490cc
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          track_progress: true
