@@ -35,7 +35,7 @@ jobs:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           prompt: "Review this PR for security issues"
-          allowed_bots: "dependabot[bot],renovate[bot]"
+          allowed_bots: ""
           claude_args: "--max-turns 3"
         env:
           ANTHROPIC_CUSTOM_HEADERS: "X-HackerOne-Handle: notre3l"
