@@ -1,0 +1,22 @@
+name: n3-rfr-action
+# N3 probe: full pinned-action gate transcript on pull_request ready_for_review.
+# Uses the shipped pr-review-comprehensive.yml shape (track_progress + prompt)
+# with github_token so no App/OIDC exchange is needed.
+on:
+  pull_request:
+    types: [ready_for_review]
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+      - name: Claude gate probe
+        uses: anthropics/claude-code-action@1d6de8cb0c237e7c15e9e1bdf973826ebae490cc
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          track_progress: true
+          prompt: |
+            N3 ready_for_review gate probe: do nothing, reply OK.
