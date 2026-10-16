@@ -1,0 +1,14 @@
+name: v25-schedule-probe
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+permissions: {}
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: identity probe
+        run: |
+          echo "V25-PROBE event=${{ github.event_name }} actor=${{ github.actor }} triggering_actor=${{ github.triggering_actor }} ref=${{ github.ref }} ref_name=${{ github.ref_name }} sha=${{ github.sha }} workspace_branch=$(git -C . rev-parse --abbrev-ref HEAD 2>/dev/null || echo no-git)"
+          echo "V25-PROBE2 GITHUB_ACTOR=$GITHUB_ACTOR GITHUB_REF_NAME=$GITHUB_REF_NAME"
