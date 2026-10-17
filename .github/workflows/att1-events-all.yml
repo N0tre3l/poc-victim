@@ -1,0 +1,26 @@
+# Exhaustive issues-event detector (ATT-1). Logs every issues action + identities.
+name: att1-events-all
+on:
+  issues:
+    types: [opened, edited, deleted, pinned, unpinned, closed, reopened, assigned, unassigned, labeled, unlabeled, locked, unlocked, transferred, milestoned, demilestoned]
+permissions:
+  contents: read
+  issues: read
+jobs:
+  log:
+    runs-on: ubuntu-latest
+    steps:
+      - name: event-identities
+        env:
+          EVENT_ACTION: ${{ github.event.action }}
+          ACTOR: ${{ github.actor }}
+          SENDER: ${{ github.event.sender.login }}
+          ISSUE_USER: ${{ github.event.issue.user.login }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          echo "ATT1-ALL repo=$REPO action=$EVENT_ACTION"
+          echo "ATT1-ALL github.actor=$ACTOR"
+          echo "ATT1-ALL sender=$SENDER"
+          echo "ATT1-ALL issue.user=$ISSUE_USER"
+          echo "ATT1-ALL issue.number=$ISSUE_NUMBER"
